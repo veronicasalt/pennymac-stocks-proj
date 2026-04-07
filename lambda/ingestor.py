@@ -21,39 +21,25 @@ def handler(event, context):
             "NVDA"
             ]
     
-    
-    if 'target_date' in event:
+    results = []
+    winner = None
+
+    if event.get('target_date'):
         target_date = datetime.strptime(event['target_date'], '%Y-%m-%d')
-        print(f"Backfill requested for specific date: {event['target_date']}")
+        print(f"Manual trigger detected. Processing date: {event['target_date']}")
     else:
         today = datetime.now()
         day_of_week = today.weekday()
         
         if day_of_week == 0: # Monday
             target_date = today - timedelta(days=3) # Friday
-        elif day_of_week in [5, 6]: # Sat/Sun
-            target_date = today - timedelta(days=(day_of_week - 4)) # Friday
+        elif day_of_week == 6: # Sunday
+            target_date = today - timedelta(days=2) # Friday
+        elif day_of_week == 5: # Saturday
+            target_date = today - timedelta(days=1) # Friday
         else:
-            target_date = today - timedelta(days=1)
-    
-    
-    
-    
-    
-    results = []
-    winner = None
+            target_date = today - timedelta(days=1) # Get yesterday
 
-    today = datetime.now()
-    day_of_week = today.weekday()
-    
-    if day_of_week == 0: # Monday
-        target_date = today - timedelta(days=3) # Friday
-    elif day_of_week == 6: # Sunday
-        target_date = today - timedelta(days=2) # Friday
-    elif day_of_week == 5: # Saturday
-        target_date = today - timedelta(days=1) # Friday
-    else:
-        target_date = today - timedelta(days=1) # in any case: get yesterday
 
     attempts = 0
     max_attempts = 5
@@ -103,5 +89,6 @@ def handler(event, context):
         except Exception as e:
             print(f"DynamoDB Error: {e}")
             return {"statusCode": 500, "body": "Failed to save to database."}
+            
     return {
         "statusCode": 404, "body": "No data found in window"}
