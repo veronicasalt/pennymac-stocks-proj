@@ -95,7 +95,7 @@ class PennymacStocksProjStack(Stack):
                 iam.ManagedPolicy.from_aws_managed_policy_name('AdministratorAccess-Amplify'),
             ],
         )
-        amplify_role.add_managed_policy_name(iam.ManagedPolicy.from_aws_managed_policy_name("AdministratorAccess-Amplify"))
+        amplify_role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("AdministratorAccess-Amplify"))
     
         amplify_app = amplify.App(
             self, "StocksFrontend",
