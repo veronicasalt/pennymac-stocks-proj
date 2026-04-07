@@ -20,6 +20,26 @@ def handler(event, context):
             "TSLA",
             "NVDA"
             ]
+    
+    
+    if 'target_date' in event:
+        target_date = datetime.strptime(event['target_date'], '%Y-%m-%d')
+        print(f"Backfill requested for specific date: {event['target_date']}")
+    else:
+        today = datetime.now()
+        day_of_week = today.weekday()
+        
+        if day_of_week == 0: # Monday
+            target_date = today - timedelta(days=3) # Friday
+        elif day_of_week in [5, 6]: # Sat/Sun
+            target_date = today - timedelta(days=(day_of_week - 4)) # Friday
+        else:
+            target_date = today - timedelta(days=1)
+    
+    
+    
+    
+    
     results = []
     winner = None
 
