@@ -7,6 +7,7 @@ from aws_cdk import (
     aws_apigateway as apigw,
     aws_secretsmanager as secrets,
     aws_amplify_alpha as amplify,
+    aws_codebuild as codebuild,
     RemovalPolicy,
     Stack,
     SecretValue
@@ -61,11 +62,15 @@ class PennymacStocksProjStack(Stack):
             }
         )
 
-        # API Gateway #########
+        # API Gateway 
         api = apigw.LambdaRestApi(
             self, "StocksAPI",
             handler=retriever_lambda,
-            proxy = False
+            proxy = False,
+            default_cors_preflight_options=apigw.CorsOptions(
+                allow_origins=apigw.Cors.ALL_ORIGINS,
+                allow_methods=apigw.Cors.ALL_METHODS
+            )
         )
         movers = api.root.add_resource("movers")
         movers.add_method("GET")
@@ -89,8 +94,26 @@ class PennymacStocksProjStack(Stack):
                 repository="pennymac-stocks-proj",
                 oauth_token=SecretValue.secrets_manager("veronicasalt_fine_grain_token")
             ),
+            build_spec=codebuild.BuildSpec.from_object({
+                "version": "1.0",
+                "frontend":{
+                    "phases": {
+                        "preBuild": {
+                            "commands": ["cd frontend", "npm install"]
+                        },
+                        "build" :{
+                            "commands": ["npm run build"]
+                        }
+                    },
+                    "artifacts": {
+                        "baseDirectory": "frontend/build",
+                        "files": ["**/*"]
+                    }
+                }
+
+            }),
             environment_variables={
-                "API_URL": api.url
+                "REACT_APP_API_URL": api.url
             }
         )
         amplify_app.add_branch("main")

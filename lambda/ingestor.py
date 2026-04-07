@@ -53,15 +53,15 @@ def handler(event, context):
                 )
 
                 if hasattr(request, 'open') and request.open:
-                    price_open = float(request.open)
-                    price_close = float(request.close)
-                    percent_change = ((price_close - price_open) / price_open) * 100
+                    o = float(request.open)
+                    c = float(request.close)
+                    percent_change = ((c - o) / o) * 100
                     
                     day_results.append({
                         "Date": date,
                         "Ticker Symbol": ticker,
                         "Percent Change": Decimal(str(round(percent_change, 2))),
-                        "Closing Price": Decimal(str(price_close)),
+                        "Closing Price": Decimal(str(c)),
                     })
             except Exception as e:
                 print(f"Error: no data for {ticker} on {date}: {e}")
