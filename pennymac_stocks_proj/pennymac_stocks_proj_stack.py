@@ -26,7 +26,7 @@ class PennymacStocksProjStack(Stack):
                 type=dynamodb.AttributeType.STRING
             ),
             sort_key=dynamodb.Attribute(
-                name="Ticker",
+                name="Ticker Symbol",
                 type=dynamodb.AttributeType.STRING
             ),
             billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
@@ -42,7 +42,8 @@ class PennymacStocksProjStack(Stack):
             code=_lambda.Code.from_asset("lambda"),
             runtime=_lambda.Runtime.PYTHON_3_11,
             handler="ingestor.handler",
-            timeout=Duration.seconds(30),
+            memory_size=512,
+            timeout=Duration.minutes(15),
             environment={
                 "TABLE_NAME": stock_table.table_name,
                 "MASSIVE_API_KEY": api_key_secret.secret_value.unsafe_unwrap()
@@ -72,7 +73,7 @@ class PennymacStocksProjStack(Stack):
         # EventBridge
         daily_rule = events.Rule(
             self, "DailyStockCheckRule",
-            schedule=events.Schedule.cron(minute="0", hour="0")
+            schedule=events.Schedule.cron(minute="23", hour="0")
         )
         daily_rule.add_target(targets.LambdaFunction(ingestor_lambda))
 

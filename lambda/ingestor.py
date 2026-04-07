@@ -4,25 +4,13 @@ import boto3
 import time
 from datetime import datetime, timedelta
 from massive import RESTClient
+from decimal import Decimal
 
 def handler(event, context):
-    api_key = os.environ.get('MASSIVE_API_KEY')
-    client = RESTClient(api_key)
-
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(os.environ['TABLE_NAME'])
-
-    if day_of_week == 0: # Monday
-        target_date = today - timedelta(days=3) # Friday
-    elif day_of_week == 6: # Sunday
-        target_date = today - timedelta(days=2) # Friday
-    elif day_of_week == 5: # Saturday
-        target_date = today - timedelta(days=1) # Friday
-    else:
-        target_date = today - timedelta(days=1) # in any case: get yesterday
-
-    date = str(target_date.date())
-    print(f"Market data for: {date}")
+    api_key = os.environ.get('MASSIVE_API_KEY')
+    client = RESTClient(api_key)
 
     stocks_list = [
             "AAPL",
@@ -33,40 +21,67 @@ def handler(event, context):
             "NVDA"
             ]
     results = []
+    winner = None
 
-
-    for ticker in stocks_list:
-        try:
-            time.sleep(12)
-            request = client.get_daily_open_close_agg(
-                ticker,
-                date,
-                adjusted="true",
-            )
-
-            price_open = request.open
-            price_close = request.close
-
-            percent_change = ((price_close - price_open) / price_open) * 100
-            results.append({
-                "Date": date,
-                "Ticker": ticker,
-                "Change": percent_change,
-                "Price": float(price_close),
-            })
-        except Exception as e:
-            print(f"Error {ticker}: {e}")
-
-    if not results:
-        print("No results found.")
-        return {"statusCode": 404, "body": "No data found."}
+    today = datetime.now()
+    day_of_week = today.weekday()
     
-    winner = max(results, key=lambda x: abs(x['Change']))
-    print(f"Winner found: {winner}")
+    if day_of_week == 0: # Monday
+        target_date = today - timedelta(days=3) # Friday
+    elif day_of_week == 6: # Sunday
+        target_date = today - timedelta(days=2) # Friday
+    elif day_of_week == 5: # Saturday
+        target_date = today - timedelta(days=1) # Friday
+    else:
+        target_date = today - timedelta(days=1) # in any case: get yesterday
 
-    try:
-        table.put_item(Item=winner)
-        return {"statusCode": 200, "body": json.dumps(winner)}
-    except Exception as e:
-        print(f"DynamoDB Error: {e}")
-        return {"statusCode": 500, "body": "Failed to save to database."}
+    attempts = 0
+    max_attempts = 5
+
+    while attempts < max_attempts:
+        date = target_date.strftime('%Y-%m-%d')
+        print(f"Market data for: {date}")
+
+        day_results = []
+
+        for ticker in stocks_list:
+            try:
+                time.sleep(12)
+                request = client.get_daily_open_close_agg(
+                    ticker,
+                    date
+                )
+
+                if hasattr(request, 'open') and request.open:
+                    price_open = float(request.open)
+                    price_close = float(request.close)
+                    percent_change = ((price_close - price_open) / price_open) * 100
+                    
+                    day_results.append({
+                        "Date": date,
+                        "Ticker Symbol": ticker,
+                        "Percent Change": Decimal(str(round(percent_change, 2))),
+                        "Closing Price": Decimal(str(price_close)),
+                    })
+            except Exception as e:
+                print(f"Error: no data for {ticker} on {date}: {e}")
+
+        if day_results:
+            results = day_results
+            winner = max(results, key=lambda x: abs(x['Percent Change']))
+            print(f"Winner on {date}: {winner['Ticker Symbol']}")
+            break   
+        else:
+            print(f"No results found for {date}. Trying previous day:")
+            target_date -= timedelta(days=1) 
+            attempts += 1
+
+    if winner:
+        try:
+            table.put_item(Item=winner)
+            return {"statusCode": 200, "body": json.dumps(winner, default=str)}
+        except Exception as e:
+            print(f"DynamoDB Error: {e}")
+            return {"statusCode": 500, "body": "Failed to save to database."}
+    return {
+        "statusCode": 404, "body": "No data found in window"}

@@ -11,9 +11,11 @@ def handler(event, context):
     table = dynamodb.Table(table_name)
 
     try:
-        response = table.scan(Limit=7)
+        response = table.scan()
         items = response.get('Items', [])
 
+        items.sort(key=lambda z: z['Date'], reverse=True) # newest items first
+        recent_items = items[:7] ############### 7 or 6??
         return{
             "statusCode": 200,
             "headers": {
@@ -21,7 +23,7 @@ def handler(event, context):
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "GET, OPTIONS" 
             },
-            "body": json.dumps(items)
+            "body": json.dumps(recent_items, default=str)
         }
     except Exception as e:
         print(f"Error: {e}")
