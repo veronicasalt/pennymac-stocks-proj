@@ -8,6 +8,7 @@ from aws_cdk import (
     aws_secretsmanager as secrets,
     aws_amplify_alpha as amplify,
     aws_codebuild as codebuild,
+    aws_iam as iam,
     RemovalPolicy,
     Stack,
     SecretValue
@@ -86,9 +87,18 @@ class PennymacStocksProjStack(Stack):
         stock_table.grant_read_data(retriever_lambda)
         stock_table.grant_write_data(ingestor_lambda)
         api_key_secret.grant_read(ingestor_lambda)
+
+        amplify_role = iam.Role(
+            self, "AmplifyServiceRole",
+            assumed_by=iam.ServicePrincipal("amplify.amazonaws.com"),
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name('AdministratorAccess-Amplify'),
+            ],
+        )
     
         amplify_app = amplify.App(
             self, "StocksFrontend",
+            role=amplify_role,
             source_code_provider=amplify.GitHubSourceCodeProvider(
                 owner="veronicasalt",
                 repository="pennymac-stocks-proj",
