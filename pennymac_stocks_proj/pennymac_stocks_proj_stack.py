@@ -48,7 +48,6 @@ class PennymacStocksProjStack(Stack):
             timeout=Duration.minutes(15),
             environment={
                 "TABLE_NAME": stock_table.table_name,
-                "MASSIVE_API_KEY": api_key_secret.secret_value.unsafe_unwrap()
             }
         )
 

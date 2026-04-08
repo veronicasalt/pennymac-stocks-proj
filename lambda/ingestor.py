@@ -6,10 +6,16 @@ from datetime import datetime, timedelta
 from massive import RESTClient
 from decimal import Decimal
 
+def get_secret():
+    client = boto3.client("secretsmanager")
+    response = client.get_secret_value(SecretId="MassiveAPIKey")
+    return response['SecretString']
+        
+
 def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(os.environ['TABLE_NAME'])
-    api_key = os.environ.get('MASSIVE_API_KEY')
+    api_key = get_secret()
     client = RESTClient(api_key)
 
     stocks_list = [
