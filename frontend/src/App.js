@@ -45,7 +45,7 @@ function App() {
               strokeWidth={3}
               dot={(props) => {
                 const { cx, cy, payload } = props;
-                const color = payload.percentValue >= 0 ? "#4CAF50" : "F44336";
+                const color = payload.percentValue >= 0 ? "#4CAF50" : "#F44336";
                 return (
                   <circle
                   key={`dot-${payload.Date}`}
