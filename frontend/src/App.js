@@ -43,8 +43,21 @@ function App() {
               stroke="8884d8"
               name="Winner % Change" 
               strokeWidth={3}
-              dot={{ r:6 }}
-              activeDot={{ r:8 }}
+              diffuseConstant={(props) => {
+                const { cx, cy, payload } == props;
+                const color = payload.percentValue >= 0 ? "#4CAF50" : "F44336";
+                return (
+                  <circle
+                  key={`dot-${payload.Date}`}
+                  cx={cx}
+                  cy={cy}
+                  r={6}
+                  fill={color}
+                  stroke="none"
+                />
+                );
+              }}
+              activeDot={{ r: 8, strokeWidth: 2}}
             />
           </LineChart>
         </ResponsiveContainer>
