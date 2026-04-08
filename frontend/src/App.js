@@ -43,8 +43,8 @@ function App() {
               stroke="8884d8"
               name="Winner % Change" 
               strokeWidth={3}
-              diffuseConstant={(props) => {
-                const { cx, cy, payload } == props;
+              dot={(props) => {
+                const { cx, cy, payload } = props;
                 const color = payload.percentValue >= 0 ? "#4CAF50" : "F44336";
                 return (
                   <circle
