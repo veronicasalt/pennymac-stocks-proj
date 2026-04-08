@@ -4,7 +4,7 @@ on:
   push:
     branches: 
       - main
-      - versonicasalt-patch-1
+      - veronicasalt-patch-1
 permissions:
   id-token: write
   contents: read
