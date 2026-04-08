@@ -24,22 +24,17 @@ def handler(event, context):
     results = []
     winner = None
 
-    if event.get('target_date'):
-        target_date = datetime.strptime(event['target_date'], '%Y-%m-%d')
-        print(f"Manual trigger detected. Processing date: {event['target_date']}")
+    today = datetime.now()
+    day_of_week = today.weekday()
+    
+    if day_of_week == 0: # Monday
+        target_date = today - timedelta(days=3) # Friday
+    elif day_of_week == 6: # Sunday
+        target_date = today - timedelta(days=2) # Friday
+    elif day_of_week == 5: # Saturday
+        target_date = today - timedelta(days=1) # Friday
     else:
-        today = datetime.now()
-        day_of_week = today.weekday()
-        
-        if day_of_week == 0: # Monday
-            target_date = today - timedelta(days=3) # Friday
-        elif day_of_week == 6: # Sunday
-            target_date = today - timedelta(days=2) # Friday
-        elif day_of_week == 5: # Saturday
-            target_date = today - timedelta(days=1) # Friday
-        else:
-            target_date = today - timedelta(days=1) # Get yesterday
-
+        target_date = today - timedelta(days=1) # in any case: get yesterday
 
     attempts = 0
     max_attempts = 5
@@ -89,6 +84,5 @@ def handler(event, context):
         except Exception as e:
             print(f"DynamoDB Error: {e}")
             return {"statusCode": 500, "body": "Failed to save to database."}
-            
     return {
         "statusCode": 404, "body": "No data found in window"}

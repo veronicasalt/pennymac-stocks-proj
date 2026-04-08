@@ -43,6 +43,8 @@ function App() {
               stroke="8884d8"
               name="Winner % Change" 
               strokeWidth={3}
+              dot={{ r:6 }}
+              activeDot={{ r:8 }}
             />
           </LineChart>
         </ResponsiveContainer>
