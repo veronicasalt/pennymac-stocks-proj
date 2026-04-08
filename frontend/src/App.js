@@ -16,7 +16,7 @@ function App() {
         ...item,
         percentValue: parseFloat(item['Percent Change'])
       })).reverse();
-      const CustomizedLabel = ({ x, y, stroke, value }: LabelProps) => {
+      const CustomizedLabel = ({ x, y, stroke, value }) => {
       return (
         <text x={x} y={y} dy={-10} fill={stroke} fontSize={12} textAnchor="middle" fontWeight="bold">
         {value}
@@ -40,13 +40,13 @@ function App() {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="Date" />
             <YAxis label={{ value: '% Change', angle: -90, position: 'insideLeft' }} />
-            <Tooltip />
-                formatter={(value, name, props) => {
-                  const ticker = props.payload['Ticker Symbol'];
-                  return [`${value}% (${ticker})`, "Daily Winner"];
-                }}
-            <Legend />
-            {/* dataKey matches the key in your DynamoDB/Lambda response */}
+            <Tooltip 
+              formatter={(value, name, props) => {
+              // Access the Ticker Symbol from the data point's payload
+              const ticker = props.payload['Ticker Symbol'];
+              return [`${value}% (${ticker})`, "Daily Winner"];
+              }}
+            />
             <Line 
               type="monotone" 
               dataKey="percentValue" 
