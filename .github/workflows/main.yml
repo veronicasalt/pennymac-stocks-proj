@@ -1,4 +1,4 @@
-name: AWS CDK Delpoy Workflow
+name: AWS CDK Delpoyment Workflow
 on:
   push:
     branches: 
