@@ -16,7 +16,13 @@ function App() {
         ...item,
         percentValue: parseFloat(item['Percent Change'])
       })).reverse();
-
+      const CustomizedLabel = ({ x, y, stroke, value }: LabelProps) => {
+      return (
+        <text x={x} y={y} dy={-10} fill={stroke} fontSize={12} textAnchor="middle" fontWeight="bold">
+        {value}
+        </text>
+        );
+      };
       setStockData(formattedData);
       setLoading(false);
     })
@@ -35,17 +41,21 @@ function App() {
             <XAxis dataKey="Date" />
             <YAxis label={{ value: '% Change', angle: -90, position: 'insideLeft' }} />
             <Tooltip />
+                formatter={(value, name, props) => {
+                  const ticker = props.payload['Ticker Symbol'];
+                  return [`${value}% (${ticker})`, "Daily Winner"];
+                }}
             <Legend />
             {/* dataKey matches the key in your DynamoDB/Lambda response */}
             <Line 
               type="monotone" 
               dataKey="percentValue" 
-              stroke="8884d8"
+              stroke="#000000"
               name="Winner % Change" 
               strokeWidth={3}
               dot={(props) => {
                 const { cx, cy, payload } = props;
-                const color = payload.percentValue >= 0 ? "#4CAF50" : "#F44336";
+                const color = payload.percentValue >= 0 ? "#45af49" : "#fa3c2f";
                 return (
                   <circle
                   key={`dot-${payload.Date}`}

@@ -36,7 +36,9 @@ def handler(event, context):
         items = response.get('Items', [])
 
         items.sort(key=lambda z: z['Date'], reverse=True) # newest items first
-        recent_items = items[:7] ############### 7 or 6??
+        recent_items = items[:7] 
+        cache["data"] = recent_items
+        cache["expiry"] = current_time + TTL_SECONDS
         return{
             "statusCode": 200,
             "headers": {
