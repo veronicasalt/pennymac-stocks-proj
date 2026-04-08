@@ -1,7 +1,9 @@
 name: AWS CDK Delpoy Workflow
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - main
+      - versonicasalt-patch-1
 permissions:
   id-token: write
   contents: read
