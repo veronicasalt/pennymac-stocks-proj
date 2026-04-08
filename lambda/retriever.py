@@ -1,6 +1,7 @@
 import json
 import os
 import boto3
+import time
 from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
