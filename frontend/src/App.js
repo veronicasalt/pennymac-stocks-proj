@@ -50,7 +50,7 @@ function App() {
             <Line 
               type="monotone" 
               dataKey="percentValue" 
-              stroke="#000000"
+              stroke="#515050"
               name="Winner % Change" 
               strokeWidth={3}
               dot={(props) => {
