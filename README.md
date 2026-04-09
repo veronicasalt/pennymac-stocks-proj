@@ -5,7 +5,7 @@ This project tracks a specific list of stocks, identifies the one with the highe
 **Stock Watchlist**: AAPL, MSFT, GOOGL, AMZN, TSLA, NVDA
 
 ## Architecture
-The system is built entirely on AWS CDK (Infrastructure as Code), meaning the entire stack is defined in pennymac_stocks_proj_stack.py. This approach avoids manual configuration in AWS Console, which ensures reproducibility.
+The system is built entirely on AWS CDK (Infrastructure as Code), meaning the entire stack is defined in pennymac_stocks_proj_stack.py. This approach avoids manual configuration in the AWS Console.
 
 
 **Infrastructure**: AWS CDK (Python),
@@ -45,12 +45,12 @@ GitHub Token: A fine-grained personal access token stored in Secrets Manager so 
 The AWS Toolkit Extension is helpful to have, but not required for this project.
 
 
-Run this command to "log in" to your aws account, so your computer knows this AWS account to send code to: `aws configure`.
+Run this command to "log in" to your aws account, so your computer knows the AWS account to send code to: `aws configure`.
 
-Install AWS CDK `npm install -g aws-cdk`
+Install AWS CDK `npm install -g aws-cdk`.
 
 
-Make sure to install Node.js `npm install`
+Make sure to install Node.js `npm install` for frontend.
 ### Secret Storage: 
 Store keys in AWS Secrets Manager to avoid coding or committing Access Keys of API Secrets. Use .gitignore! 
 
@@ -67,7 +67,7 @@ Install dependencies `pip install -r requirements.txt`.
 Boostrapping the environment is only necessary once,
 `cdk bootstrap aws:://<account id>/us-west-1
 
-However, if you don't have GitHub Actions set up, this command is necessary to deploy. Otherwise, everytime you commit and push code to your GitHub repository, it will be deployed to AWS as well.
+However, if you don't have GitHub Actions set up, this next command is necessary to deploy. Otherwise, everytime you commit and push code to your GitHub repository, it will be deployed to AWS as well.
 `cdk deploy
 
 
@@ -82,7 +82,7 @@ However, if you don't have GitHub Actions set up, this command is necessary to d
 
 ## Dashboard
 * A line chart shows the trend of daily winners for the past 7 days. Data points on the graph are automatically colored either Red or Green to mark whether it is a gain or a loss.
-* Cards have stock information such as price data, percent change, and date. Cards are responsive after hovering over them. The layout is flexible to mobile and desktop screens.
+* Cards have stock information such as price data, percent change, and date. Cards are responsive. The layout is flexible to mobile and desktop screens.
 
 Project Link: https://github.com/veronicasalt/pennymac-stocks-proj.git 
 
