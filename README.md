@@ -50,7 +50,7 @@ cdk deploy
 ```
 
 ## Challenges 
-1. API Rate: The Massive API has a limit of 5 requests per minute. To prevent 429  errors, ingestor.py uses a throttling delay of time.sleep(12) between ticker requests.
+1. API Rate: The Massive API has a limit of 5 requests per minute. To prevent 429  errors, ingestor.py uses a throttling delay of time.sleep(12) between ticker requests (60 seconds / 5 requests = 12 seconds per request).
 
 
 2. IAM: Encountered “Provisioning Missing Trust” errors when deploying the frontend. This was resolved after updating the IAM stack to use a Composite Principal- which allows Amplify and CodeBuild to hold IAM Service Roles.
