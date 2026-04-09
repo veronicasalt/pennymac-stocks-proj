@@ -42,7 +42,8 @@ GitHub Token: A fine-grained personal access token stored in Secrets Manager so 
 Secret Storage: Store keys in AWS Secrets Manager to avoid coding or committing Access Keys of API Secrets. Use .gitignore!
 Bootstrap and Deploy: 
 ```cdk bootstrap aws:://<account id>/us-west-1
-cdk deploy ```
+cdk deploy
+```
 
 ## Challenges 
 API Rate: The Massive API has a limit of 5 requests per minute. To prevent 429  errors, ingestor.py uses a throttling delay of time.sleep(12) between ticker requests.
