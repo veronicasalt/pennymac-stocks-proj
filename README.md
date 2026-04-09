@@ -63,4 +63,6 @@ cdk deploy
 * Cards have stock information such as price data, percent change, and date. Cards are responsive after hovering over them. The layout is flexible to mobile and desktop screens.
 
 Project Link: https://github.com/veronicasalt/pennymac-stocks-proj.git 
+
+
 Live Demo: https://main.d1zvq0nkbapr6l.amplifyapp.com/
