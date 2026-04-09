@@ -92,11 +92,27 @@ Live Demo: https://main.d1zvq0nkbapr6l.amplifyapp.com/
 
 ## Citations:
 Cards: https://developer.mozilla.org/en-US/docs/Web/CSS/How_to/Layout_cookbook/Card#recipe
+
+
 Charts: https://recharts.github.io/en-US/guide/getting-started/
+
+
 Charts: https://recharts.github.io/en-US/examples/CustomizedLabelLineChart/
+
+
 AWS Service Role: https://docs.aws.amazon.com/amplify/latest/userguide/amplify-service-role.html#:~:text=Amplify%20requires%20permissions%20to%20deploy,manage%20backends%20on%20your%20behalf
+
+
 AWS CDK Documentation: https://docs.aws.amazon.com/cdk/api/v2/python/
+
+
 AWS Amplify Alpha: https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_amplify_alpha/README.html
+
+
 AWS IAM Role and CompositePrincipal: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html#id_roles_terms-and-concepts
+
+
 GitHub Actions OIDC: https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws
+
+
 AWS Secrets Manager: https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_secretsmanager/README.html
