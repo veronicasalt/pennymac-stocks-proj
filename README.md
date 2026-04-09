@@ -17,10 +17,10 @@ The system is built entirely on AWS CDK (Infrastructure as Code), meaning the en
 **Compute**: Lambda functions (ingestor.py and retriever.py),
 
 
-* ingestor.py: fetches data from Massive API, calculates the daily winner, and saves to DynamoDB
+* ingestor.py: fetches data from Massive API, calculates the daily winner, and saves to DynamoDB.
 
 
-* retriever.py: fetches the last 7 days of results with a TTL cache to optimize performance given high traffic or frequency of data fetching
+* retriever.py: fetches the last 7 days of results with a TTL cache to optimize performance given high traffic or frequency of data fetching.
 
 
 **Storage**: Amazon DynamoDB,
