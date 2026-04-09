@@ -78,7 +78,7 @@ class PennymacStocksProjStack(Stack):
         # EventBridge
         daily_rule = events.Rule(
             self, "DailyStockCheckRule",
-            schedule=events.Schedule.cron(minute="23", hour="0")
+            schedule=events.Schedule.cron(minute="0", hour="1")
         )
         daily_rule.add_target(targets.LambdaFunction(ingestor_lambda))
 
