@@ -65,10 +65,10 @@ Install dependencies `pip install -r requirements.txt`.
 
 ### Provisioning and Deploy: 
 Boostrapping the environment is only necessary once,
-`cdk bootstrap aws:://<account id>/us-west-1
+`cdk bootstrap aws:://<account id>/us-west-1`
 
 However, if you don't have GitHub Actions set up, this next command is necessary to deploy. Otherwise, everytime you commit and push code to your GitHub repository, it will be deployed to AWS as well.
-`cdk deploy
+`cdk deploy`
 
 
 ## Challenges 
